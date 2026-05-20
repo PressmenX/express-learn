@@ -8,12 +8,38 @@ const products = [
 
 app.use(express.json());
 
+const logger = (req, res, next) => {
+  console.log(`[${Date.now()}] ${req.method} ${req.url}`);
+  next()
+}
+const authCheck = (req, res, next) => {
+  const  token=  req.headers.authorization
+
+  if (!token) {
+   return res.status(401).json({
+      error : "Unauthorized",
+      message : "Token tidak ada"
+    })
+  }
+
+  console.log(token);
+
+  next()
+}
+
+app.use(logger)
+
 app.get("/", (req, res) => {
   res.json({ message: "Server Hidup!" });
 });
 
 app.get("/products", (req, res) => {
   const { category, limit } = req.query;
+
+  if (!category || !limit) {
+    return res.json(products)
+  }
+
   res.json({
     category,
     limit : Number(limit),
@@ -27,7 +53,7 @@ app.get("/products/:id", (req, res) => {
   res.json({ data: products[index] });
 });
 
-app.post("/products", (req, res) => {
+app.post("/products", authCheck, (req, res) => {
   const { id, name } = req.body;
 
   if (!id || !name) {
@@ -39,7 +65,7 @@ app.post("/products", (req, res) => {
   res.status(201).json({ message: "Data berhasil dibuat!", created : data });
 });
 
-app.put("/products/:id", (req, res) => {
+app.put("/products/:id", authCheck, (req, res) => {
   const id = Number(req.params.id);
   const data = req.body;
   const index = products.findIndex((p) => p.id === id);
@@ -51,7 +77,7 @@ app.put("/products/:id", (req, res) => {
   }
 });
 
-app.delete("/products/:id", (req, res) => {
+app.delete("/products/:id", authCheck, (req, res) => {
   const id = Number(req.params.id);
   const index = products.findIndex((p) => p.id === id);
   if (index !== -1) {
