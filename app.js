@@ -1,91 +1,12 @@
 const express = require("express");
 const app = express();
-
-const products = [
-  { id: 1, name: "Milk" },
-  { id: 2, name: "Coffe" },
-];
+const { productsRouter, usersRouter } = require("./src/routes");
+const { logger } = require('./src/middleware');
 
 app.use(express.json());
 
-const logger = (req, res, next) => {
-  console.log(`[${Date.now()}] ${req.method} ${req.url}`);
-  next()
-}
-const authCheck = (req, res, next) => {
-  const  token=  req.headers.authorization
-
-  if (!token) {
-   return res.status(401).json({
-      error : "Unauthorized",
-      message : "Token tidak ada"
-    })
-  }
-
-  console.log(token);
-
-  next()
-}
-
 app.use(logger)
-
-app.get("/", (req, res) => {
-  res.json({ message: "Server Hidup!" });
-});
-
-app.get("/products", (req, res) => {
-  const { category, limit } = req.query;
-
-  if (!category || !limit) {
-    return res.json(products)
-  }
-
-  res.json({
-    category,
-    limit : Number(limit),
-    data: products,
-  });
-});
-
-app.get("/products/:id", (req, res) => {
-  const id = Number(req.params.id);
-  const index = products.findIndex((p) => p.id === id);
-  res.json({ data: products[index] });
-});
-
-app.post("/products", authCheck, (req, res) => {
-  const { id, name } = req.body;
-
-  if (!id || !name) {
-    return res.status(400).json({ message: "Data tidak Valid" });
-  }
-
-  const data = { id, name };
-  products.push(data);
-  res.status(201).json({ message: "Data berhasil dibuat!", created : data });
-});
-
-app.put("/products/:id", authCheck, (req, res) => {
-  const id = Number(req.params.id);
-  const data = req.body;
-  const index = products.findIndex((p) => p.id === id);
-  if (index !== -1) {
-    products[index] = { id, ...data };
-    res.json({ data: products[index] });
-  } else {
-    res.status(404).json({ message: "Product tidak ditemukan" });
-  }
-});
-
-app.delete("/products/:id", authCheck, (req, res) => {
-  const id = Number(req.params.id);
-  const index = products.findIndex((p) => p.id === id);
-  if (index !== -1) {
-    products.splice(index, 1);
-    res.json({ message: `Data ${id} berhasil Di hapus` });
-  } else {
-    res.status(404).json({ message: "Product tidak ditemukan" });
-  }
-});
+app.use("/products", productsRouter)
+app.use("/users", usersRouter)
 
 module.exports = app;

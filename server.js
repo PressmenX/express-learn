@@ -10,25 +10,9 @@ app.listen(PORT, async () => {
   });
   console.log(await res.json());
 
-  const res2 = await fetch("http://localhost:3000/products", {
-    method: "POST",
-    headers: {
-      authorization: "Bearer pass231",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ id: 4, name: "Strawberry Juice" }),
-  });
+  const res2 = await fetch("http://localhost:3000/users");
   console.log(await res2.json());
 
-  const res3 = await fetch("http://localhost:3000/products", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ id: 4, name: "Strawberry Juice" }),
-  });
+  const res3 = await fetch("http://localhost:3000/products/1");
   console.log(await res3.json());
-
-  const res4 = await fetch("http://localhost:3000/products/1", {
-    method: "DELETE",
-  });
-  console.log(await res4.json());
 });
