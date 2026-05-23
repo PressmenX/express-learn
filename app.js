@@ -1,11 +1,17 @@
 const express = require("express");
+const cors = require('cors');
+const helmet  = require("helmet");
+const morgan = require("morgan");
 const app = express();
 const { productsRouter, usersRouter } = require("./src/routes");
 const { logger } = require("./src/middlewares");
 
+app.use(helmet())
+app.use(cors())
+app.use(morgan("dev"))
 app.use(express.json());
+app.use(logger)
 
-app.use(logger);
 app.use("/products", productsRouter);
 app.use("/users", usersRouter);
 
