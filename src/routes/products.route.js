@@ -1,5 +1,6 @@
 const { Router } = require("express");
-const authCheck  = require("../middleware/auth.middleware");
+const authCheck = require("../middlewares/auth.middleware");
+const { asyncHandler } = require("../middlewares");
 const router = Router();
 
 const products = [
@@ -7,58 +8,86 @@ const products = [
   { id: 2, name: "Coffe" },
 ];
 
-router.get("/", (req, res) => {
-  const { category, limit } = req.query;
+router.get(
+  "/",
+  asyncHandler((req, res) => {
+    const { category, limit } = req.query;
 
-  if (!category || !limit) {
-    return res.json(products);
-  }
-  res.json({
-    category,
-    limit: Number(limit),
-    data: products,
-  });
-});
+    if (!category || !limit) {
+      return res.json(products);
+    }
+    res.json({
+      category,
+      limit: Number(limit),
+      data: products,
+    });
+  }),
+);
 
-router.get("/:id", (req, res) => {
-  const id = Number(req.params.id);
-  const index = products.findIndex((p) => p.id === id);
-  res.json({ data: products[index] });
-});
+router.get(
+  "/:id",
+  authCheck,
+  asyncHandler((req, res) => {
+    const id = Number(req.params.id);
+    const index = products.findIndex((p) => p.id === id);
 
-router.post("/", authCheck, (req, res) => {
-  const { id, name } = req.body;
+    if (index === -1) {
+      const err = new Error("Data produk tidak ditemukan");
+      err.status = 404;
+      throw err;
+    }
 
-  if (!id || !name) {
-    return res.status(400).json({ message: "Data tidak Valid" });
-  }
+    res.json({ data: products[index] });
+  }),
+);
 
-  const data = { id, name };
-  products.push(data);
-  res.status(201).json({ message: "Data berhasil dibuat!", created: data });
-});
+router.post(
+  "/",
+  authCheck,
+  asyncHandler((req, res) => {
+    const data= req.body;
 
-router.put("/:id", authCheck, (req, res) => {
-  const id = Number(req.params.id);
-  const data = req.body;
-  const index = products.findIndex((p) => p.id === id);
-  if (index !== -1) {
+    if (!data.id || !data.name) {
+      return res.status(400).json({ message: "Data tidak lengkap" })
+    }
+
+    products.push(data)
+    res.json({data});
+  }),
+);
+
+router.put(
+  "/:id",
+  authCheck,
+  asyncHandler((req, res) => {
+    const id = Number(req.params.id);
+    const data = req.body;
+    const index = products.findIndex((p) => p.id === id);
+
+    if (index === -1) {
+      const err = new Error("Data produk tidak ditemukan");
+      err.status = 404;
+      throw err;
+    }
     products[index] = { id, ...data };
     res.json({ data: products[index] });
-  } else {
-    res.status(404).json({ message: "Product tidak ditemukan" });
-  }
-});
+  }),
+);
 
-router.delete("/:id", authCheck, (req, res) => {
-  const id = Number(req.params.id);
-  const index = products.findIndex((p) => p.id === id);
-  if (index !== -1) {
+router.delete(
+  "/:id",
+  authCheck,
+  asyncHandler((req, res) => {
+    const id = Number(req.params.id);
+    const index = products.findIndex((p) => p.id === id);
+    if (index === -1) {
+      const err = new Error("Data produk tidak ditemukan");
+      err.status = 404;
+      throw err;
+    }
     products.splice(index, 1);
     res.json({ message: `Data ${id} berhasil Di hapus` });
-  } else {
-    res.status(404).json({ message: "Product tidak ditemukan" });
-  }
-});
+  }),
+);
 
 module.exports = router;

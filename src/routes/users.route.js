@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const authCheck  = require("../middleware/auth.middleware");
+const authCheck = require("../middlewares/auth.middleware");
 const router = Router();
 
 const users = [];
