@@ -1,6 +1,7 @@
 const { Router } = require("express");
 const authCheck = require("../middlewares/auth.middleware");
-const { asyncHandler } = require("../middlewares");
+const { asyncHandler, validate } = require("../middlewares");
+const { productSchema } = require("../schemas");
 const router = Router();
 
 const products = [
@@ -44,12 +45,9 @@ router.get(
 router.post(
   "/",
   authCheck,
+  validate(productSchema),
   asyncHandler((req, res) => {
     const data= req.body;
-
-    if (!data.id || !data.name) {
-      return res.status(400).json({ message: "Data tidak lengkap" })
-    }
 
     products.push(data)
     res.json({data});
