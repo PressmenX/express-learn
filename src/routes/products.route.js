@@ -2,90 +2,27 @@ const { Router } = require("express");
 const authCheck = require("../middlewares/auth.middleware");
 const { asyncHandler, validate } = require("../middlewares");
 const { productSchema } = require("../schemas");
+const controller = require("../controllers/product.controller");
 const router = Router();
 
-const products = [
-  { id: 1, name: "Milk" },
-  { id: 2, name: "Coffe" },
-];
+router.get("/", asyncHandler(controller.getAll));
 
-router.get(
-  "/",
-  asyncHandler((req, res) => {
-    const { category, limit } = req.query;
-
-    if (!category || !limit) {
-      return res.json(products);
-    }
-    res.json({
-      category,
-      limit: Number(limit),
-      data: products,
-    });
-  }),
-);
-
-router.get(
-  "/:id",
-  authCheck,
-  asyncHandler((req, res) => {
-    const id = Number(req.params.id);
-    const index = products.findIndex((p) => p.id === id);
-
-    if (index === -1) {
-      const err = new Error("Data produk tidak ditemukan");
-      err.status = 404;
-      throw err;
-    }
-
-    res.json({ data: products[index] });
-  }),
-);
+router.get("/:id", authCheck, asyncHandler(controller.getById));
 
 router.post(
   "/",
   authCheck,
   validate(productSchema),
-  asyncHandler((req, res) => {
-    const data= req.body;
-
-    products.push(data)
-    res.json({data});
-  }),
+  asyncHandler(controller.create),
 );
 
 router.put(
   "/:id",
   authCheck,
-  asyncHandler((req, res) => {
-    const id = Number(req.params.id);
-    const data = req.body;
-    const index = products.findIndex((p) => p.id === id);
-
-    if (index === -1) {
-      const err = new Error("Data produk tidak ditemukan");
-      err.status = 404;
-      throw err;
-    }
-    products[index] = { id, ...data };
-    res.json({ data: products[index] });
-  }),
+  validate(productSchema),
+  asyncHandler(controller.update),
 );
 
-router.delete(
-  "/:id",
-  authCheck,
-  asyncHandler((req, res) => {
-    const id = Number(req.params.id);
-    const index = products.findIndex((p) => p.id === id);
-    if (index === -1) {
-      const err = new Error("Data produk tidak ditemukan");
-      err.status = 404;
-      throw err;
-    }
-    products.splice(index, 1);
-    res.json({ message: `Data ${id} berhasil Di hapus` });
-  }),
-);
+router.delete("/:id", authCheck, asyncHandler(controller.remove));
 
 module.exports = router;

@@ -6,8 +6,6 @@ const authCheck = (req, res, next) => {
     err.status = 401;
     return next(err);
   }
-
-  console.log(token);
   next();
 };
 
