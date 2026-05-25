@@ -2,8 +2,12 @@ const { Router } = require("express");
 const authCheck = require("../middlewares/auth.middleware");
 const { asyncHandler, validate } = require("../middlewares");
 const { productSchema } = require("../schemas");
-const controller = require("../controllers/product.controller");
+const makeProductController = require("../controllers/product.controller");
+const makeProductService = require("../services/product.service");
+
 const router = Router();
+const service = makeProductService()
+const controller = makeProductController(service);
 
 router.get("/", asyncHandler(controller.getAll));
 
