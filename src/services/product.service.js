@@ -1,7 +1,6 @@
-const repo = require("../repositories/product.repository");
 const createError = require("../utils/createError");
 
-const makeProductService = () => {
+const makeProductService = (repo) => {
   const getAllProduct = () => repo.getAll();
 
   const getProductById = (id) => {

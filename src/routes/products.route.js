@@ -4,9 +4,11 @@ const { asyncHandler, validate } = require("../middlewares");
 const { productSchema } = require("../schemas");
 const makeProductController = require("../controllers/product.controller");
 const makeProductService = require("../services/product.service");
+const makeProductRepository = require("../repositories/product.repository");
 
 const router = Router();
-const service = makeProductService()
+const repo = makeProductRepository()
+const service = makeProductService(repo);
 const controller = makeProductController(service);
 
 router.get("/", asyncHandler(controller.getAll));
