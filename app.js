@@ -15,6 +15,14 @@ app.use(logger)
 app.use("/products", productsRouter);
 app.use("/users", usersRouter);
 
+app.use('/health', (req, res) => {
+  res.status(200).json({
+    status : 'ok',
+    uptime : process.uptime(),
+    timestamp: new Date().toISOString()
+  })
+})
+
 app.use((err, req, res, next)=> {
   console.log("Error Terdeteksi");
   res.status(err.status ?? 500).json({
