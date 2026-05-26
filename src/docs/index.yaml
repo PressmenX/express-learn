@@ -1,0 +1,35 @@
+  # src/docs/index.yaml
+  openapi: 3.0.0
+  info:
+    title: Product API
+    version: 1.0.0
+    description: Dokumentasi REST API Product
+  paths:
+    /products:
+      get:
+        summary: Ambil semua Produk
+        responses:
+          200:
+            description: Berhasil mengembalikan semua Produk
+      post:
+        summary: Tambah produk baru
+        responses:
+          201:
+            description: Produk berhasil ditambahkan
+
+    /products/{id}:
+      get:
+        summary: Ambil produk berdasarkan id
+        responses:
+          200:
+            description: Berhasil mengembalikan produk yang sesuai id
+      put:
+        summary: update produk berdasarkan id
+        responses:
+          200:
+            description: Berhasil update produk yang sesuai id
+      delete:
+        summary: delete produk berdasarkan id
+        responses:
+          200:
+            description: Berhasil menghapus produk yang sesuai id

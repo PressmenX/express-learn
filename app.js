@@ -8,13 +8,13 @@ const { logger } = require("./src/middlewares");
 const swaggerUi = require("swagger-ui-express");
 const swaggerSpec = require("./src/config/swagger");
 
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
 app.use(helmet());
 app.use(cors());
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(logger);
-
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use("/products", productsRouter);
 app.use("/users", usersRouter);

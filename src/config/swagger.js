@@ -1,15 +1,5 @@
-const swaggerJsdoc = require('swagger-jsdoc')
+const YAML = require("yamljs");
+const path = require("path");
+const swaggerSpec = YAML.load(path.join(__dirname, "../docs/index.yaml"));
 
-const options = {
-  definition: {
-    openapi: '3.0.0',
-    info: {
-      title: 'Product API',
-      version: '1.0.0',
-      description: 'Dokumentasi REST API Product'
-    },
-  },
-  apis: ['./src/routes/*.js'], 
-}
-
-module.exports = swaggerJsdoc(options)
+module.exports = swaggerSpec;
