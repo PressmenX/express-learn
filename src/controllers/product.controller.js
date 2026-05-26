@@ -1,19 +1,19 @@
 const { toProductResponse, inputProductDTO } = require("../dtos/product.dto");
 
-const makeProductController = (service) => {
+const makeProductController = (useCase) => {
   const getAll = (req, res) => {
-    const products = service.getAllProduct();
+    const products = useCase.getAll.execute();
     res.status(200).json({ data: products });
   };
 
   const getById = (req, res) => {
     const id = Number(req.params.id);
-    const product = service.getProductById(id);
+    const product = useCase.getById.execute(id)
     res.status(200).json({ data: toProductResponse(product) });
   };
 
   const create = (req, res) => {
-    const newProduct = service.createProduct(inputProductDTO(req.body));
+    const newProduct = useCase.create.execute(inputProductDTO(req.body));
     res
       .status(201)
       .json({ message: "Data berhasil ditambahkan", data: newProduct });
@@ -21,7 +21,7 @@ const makeProductController = (service) => {
 
   const update = (req, res) => {
     const id = Number(req.params.id);
-    const updatedProduct = service.updateProduct(id, inputProductDTO(req.body));
+    const updatedProduct = useCase.update.execute(id, inputProductDTO(req.body));
     res
       .status(200)
       .json({ message: "Produk berhasil diupdate", data: updatedProduct });
@@ -29,7 +29,7 @@ const makeProductController = (service) => {
 
   const remove = (req, res) => {
     const id = Number(req.params.id);
-    const deletedProduct = service.deleteProduct(id);
+    const deletedProduct = useCase.delete.execute(id);
     res
       .status(200)
       .json({ message: `Produk dengan id ${id} berhasil dihapus` });
