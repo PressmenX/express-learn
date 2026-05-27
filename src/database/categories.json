@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "name": "Beverages",
+    "description": "Berbagai macam minuman segar, dingin, dan hangat."
+  },
+  {
+    "id": 2,
+    "name": "Food & Snacks",
+    "description": "Makanan berat, camilan ringan, dan hidangan penutup."
+  },
+  {
+    "id": 3,
+    "name": "Electronics",
+    "description": "Perangkat digital, gawai, dan aksesori elektronik."
+  },
+  {
+    "id": 4,
+    "name": "Apparel & Fashion",
+    "description": "Pakaian pria, wanita, anak-anak, dan aksesori gaya hidup."
+  },
+  {
+    "id": 5,
+    "name": "Health & Beauty",
+    "description": "Produk perawatan tubuh, kosmetik, dan suplemen kesehatan."
+  },
+  {
+    "id": 6,
+    "name": "Home Living",
+    "description": "Perabot rumah tangga, dekorasi, dan perlengkapan dapur."
+  }
+]

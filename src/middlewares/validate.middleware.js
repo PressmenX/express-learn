@@ -1,15 +1,17 @@
-const validate = (schema) => (req, res,next) => {
-  const result = schema.safeParse(req.body)
+const createError = require("../utils/createError");
+
+const validate = (schema) => (req, res, next) => {
+  const result = schema.safeParse(req.body);
 
   if (!result.success) {
     return res.status(400).json({
-      message : "Data Tidak Valid",
-      errors : result.error.flatten().fieldErrors
-    })
+      message: "Data Tidak Valid",
+      errors: result.error.flatten().fieldErrors,
+    });
   }
 
-  req.body = result.data
-  next()
-}
+  req.body = result.data;
+  next();
+};
 
-module.exports = validate
+module.exports = validate;
