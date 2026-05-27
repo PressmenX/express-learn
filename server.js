@@ -9,7 +9,7 @@ const server = app.listen(config.app.port, async () => {
   const res1 = await fetch("http://localhost:3000/categories", {
     method : "POST",
     headers : {'content-type' : 'application/json'},
-    body : JSON.stringify({ id : 7})
+    body : JSON.stringify({ id : 7, name : "Tools", description : "Alat serba bisa"})
   });
   logger.info({ response : await res1.json() }, "Response GET /categories");
 
