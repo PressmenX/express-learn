@@ -3,7 +3,7 @@ const cors = require("cors");
 const helmet = require("helmet");
 const morgan = require("morgan");
 const app = express();
-const { productsRouter, usersRouter } = require("./src/routes");
+const { productsRouter, usersRouter, categoryRouter } = require("./src/routes");
 const swaggerUi = require("swagger-ui-express");
 const swaggerSpec = require("./src/config/swagger");
 const logger = require("./src/utils/logger");
@@ -17,6 +17,7 @@ app.use(express.json());
 app.use(requireContentType)
 
 app.use("/products", productsRouter);
+app.use("/categories", categoryRouter)
 app.use("/users", usersRouter);
 
 app.use("/health", (req, res) => {
