@@ -1,4 +1,4 @@
-const { default: z } = require("zod");
+const { z } = require("zod");
 
 const categorySchema = z.object({
   id: z.number(),

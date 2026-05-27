@@ -6,9 +6,9 @@ const categories = getDataJSON(FILE_PATH);
 const makeCategoryRepository = () => ({
   getAll: () => categories,
   getById: (id) => {
-    const index = categories.findIndex((d) => d.id === id);
-    if (index === -1) return null;
-    return categories[index];
+    const category = categories.find((d) => d.id === id);
+    if (!category) return null;
+    return category;
   },
   remove: (id) => {
     const index = categories.findIndex((d) => d.id === id);

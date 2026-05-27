@@ -11,10 +11,10 @@ const server = app.listen(config.app.port, async () => {
     headers : {'content-type' : 'application/json'},
     body : JSON.stringify({ id : 7, name : "Tools", description : "Alat serba bisa"})
   });
-  logger.info({ response : await res1.json() }, "Response GET /categories");
+  logger.info({ response : await res1.json() }, "Response POST /categories");
 
-  const res = await fetch("http://localhost:3000/categories");
-  logger.info({ response : await res.json() }, "Response GET /categories");
+  const res = await fetch("http://localhost:3000/categories/7");
+  logger.info({ response : await res.json() }, "Response GET /categories/7");
 });
 
 const shutdown = (signal) => {

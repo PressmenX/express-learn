@@ -14,7 +14,7 @@ router.get("/", asyncHandler(controller.getAll));
 router.post("/", validate(categorySchema), asyncHandler(controller.create));
 
 router.get("/:id", asyncHandler(controller.getById));
-router.put("/:id", asyncHandler(controller.update));
+router.put("/:id", validate(categorySchema), asyncHandler(controller.update));
 router.delete("/:id", asyncHandler(controller.delete));
 
 module.exports = router;

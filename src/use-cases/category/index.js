@@ -1,4 +1,3 @@
-const makeCategoryRepository = require("../../repositories/category.repository");
 const makeCreate = require("./Create");
 const makeDelete = require("./Delete");
 const makeGetById = require("./GetById");
